@@ -1,0 +1,23 @@
+!pip install google-play-scraper
+from google_play_scraper import app
+import pandas as pd
+import numpy as np
+from google_play_scraper import Sort, reviews_all
+
+us_reviews = reviews_all(
+    'com.microblink.photomath',
+    lang='id',
+    country='id',
+    sort=Sort.NEWEST,
+    count=1000,
+    filter_score_with=None
+)
+df_busu = pd.DataFrame(np.array(result),columns=['review'])
+df_busu = df_busu.join(pd.DataFrame(df_busu.pop('review').tolist()))
+df_busu.head(10)
+len(df_busu.index)
+# Directly create the DataFrame using the 'us_reviews' list
+df_busu = pd.DataFrame(us_reviews)
+df_busu[['userName', 'score', 'content']].head()
+my_df = df_busu[['userName','score','at','content']]
+my_df.to_csv("scrapped.csv", index = False)
